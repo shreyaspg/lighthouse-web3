@@ -13,6 +13,7 @@ mod proposer_duties;
 mod state_id;
 mod sync_committees;
 mod validator_inclusion;
+mod validator_performance;
 mod version;
 
 use beacon_chain::{
@@ -2515,6 +2516,17 @@ pub fn serve<T: BeaconChainTypes>(
             },
         );
 
+    let get_lighthouse_validator_performance = warp::path("lighthouse")
+        .and(warp::path("validator_performance"))
+        .and(warp::query::<eth2::lighthouse::ValidatorPerformanceQuery>())
+        .and(warp::path::end())
+        .and(chain_filter.clone())
+        .and_then(|query, chain: Arc<BeaconChain<T>>| {
+            blocking_json_task(move || {
+                validator_performance::get_validator_performance(query, chain)
+            })
+        });
+
     let get_events = eth1_v1
         .and(warp::path("events"))
         .and(warp::path::end())
@@ -2633,6 +2645,7 @@ pub fn serve<T: BeaconChainTypes>(
                 .or(get_lighthouse_beacon_states_ssz.boxed())
                 .or(get_lighthouse_staking.boxed())
                 .or(get_lighthouse_database_info.boxed())
+                .or(get_lighthouse_validator_performance.boxed())
                 .or(get_events.boxed()),
         )
         .or(warp::post().and(

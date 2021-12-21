@@ -1,5 +1,7 @@
 //! This module contains endpoints that are non-standard and only available on Lighthouse servers.
 
+mod validator_performance;
+
 use crate::{
     ok_or_error,
     types::{BeaconState, ChainSpec, Epoch, EthSpec, GenericResponse, ValidatorId},
@@ -13,6 +15,9 @@ use ssz_derive::{Decode, Encode};
 use store::{AnchorInfo, Split};
 
 pub use lighthouse_network::{types::SyncState, PeerInfo};
+pub use validator_performance::{
+    ValidatorPerformance, ValidatorPerformanceQuery,
+};
 
 // Define "legacy" implementations of `Option<T>` which use four bytes for encoding the union
 // selector.

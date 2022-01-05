@@ -428,10 +428,52 @@ pub struct AttestationPoolQuery {
     pub committee_index: Option<u64>,
 }
 
-#[derive(Deserialize)]
+#[derive(Debug, Default, Deserialize)]
 pub struct ValidatorsQuery {
-    pub id: Option<QueryVec<ValidatorId>>,
-    pub status: Option<QueryVec<ValidatorStatus>>,
+    pub id: Option<Vec<ValidatorId>>,
+    pub status: Option<Vec<ValidatorStatus>>,
+}
+
+impl ValidatorsQuery {
+    pub fn filter(raw_query: Vec<(String, String)>) -> Result<Self, String> {
+        let mut parsed_query = Self::default();
+        for (key, val) in raw_query {
+            match key.as_ref() {
+                "id" => {
+                    // Initialize the option if it is a `None`.
+                    parsed_query.id.get_or_insert(vec![]);
+
+                    let mut vec = val
+                        .split(",")
+                        .map(|s| s.parse().map_err(|_| "unable to parse".to_string()))
+                        .collect::<Result<Vec<ValidatorId>, String>>()?;
+
+                    parsed_query
+                        .id
+                        .as_mut()
+                        .ok_or("Query could not be parsed.".to_string())?
+                        .append(&mut vec);
+                }
+                "status" => {
+                    // Initialize the option if it is a `None`.
+                    parsed_query.status.get_or_insert(vec![]);
+
+                    let mut vec = val
+                        .split(",")
+                        .map(|s| s.parse().map_err(|_| "unable to parse".to_string()))
+                        .collect::<Result<Vec<ValidatorStatus>, String>>()?;
+
+                    parsed_query
+                        .status
+                        .as_mut()
+                        .ok_or("Query could not be parsed.".to_string())?
+                        .append(&mut vec);
+                }
+                _ => return Err(format!("Unknown query key: {}", key)),
+            }
+        }
+        Ok(parsed_query)
+    }
 }
 
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -535,6 +577,13 @@ impl<T: FromStr> TryFrom<String> for QueryVec<T> {
             .map(|s| s.parse().map_err(|_| "unable to parse".to_string()))
             .collect::<Result<Vec<T>, String>>()
             .map(Self)
+    }
+}
+
+impl<T: FromStr> QueryVec<T> {
+    fn append(mut self, other: &mut QueryVec<T>) -> Self {
+        self.0.append(&mut other.0);
+        self
     }
 }
 

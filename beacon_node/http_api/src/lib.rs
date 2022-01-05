@@ -548,15 +548,22 @@ pub fn serve<T: BeaconChainTypes>(
     let get_beacon_state_validators = beacon_states_path
         .clone()
         .and(warp::path("validators"))
-        .and(warp::query::<api_types::ValidatorsQuery>())
+        .and(warp::query())
         .and(warp::path::end())
         .and_then(
-            |state_id: StateId, chain: Arc<BeaconChain<T>>, query: api_types::ValidatorsQuery| {
+            |state_id: StateId, chain: Arc<BeaconChain<T>>, query_vec: Vec<(String, String)>| {
                 blocking_json_task(move || {
                     state_id
                         .map_state(&chain, |state| {
                             let epoch = state.current_epoch();
                             let far_future_epoch = chain.spec.far_future_epoch;
+
+                            let query = api_types::ValidatorsQuery::filter(query_vec.clone())
+                                .map_err(|e| {
+                                    warp_utils::reject::custom_bad_request(format!("{:?}", e))
+                                })?;
+
+                            println!("###### Validator Query: {:?}", query);
 
                             Ok(state
                                 .validators()
@@ -566,7 +573,7 @@ pub fn serve<T: BeaconChainTypes>(
                                 // filter by validator id(s) if provided
                                 .filter(|(index, (validator, _))| {
                                     query.id.as_ref().map_or(true, |ids| {
-                                        ids.0.iter().any(|id| match id {
+                                        ids.iter().any(|id| match id {
                                             ValidatorId::PublicKey(pubkey) => {
                                                 &validator.pubkey == pubkey
                                             }
@@ -586,8 +593,8 @@ pub fn serve<T: BeaconChainTypes>(
 
                                     let status_matches =
                                         query.status.as_ref().map_or(true, |statuses| {
-                                            statuses.0.contains(&status)
-                                                || statuses.0.contains(&status.superstatus())
+                                            statuses.contains(&status)
+                                                || statuses.contains(&status.superstatus())
                                         });
 
                                     if status_matches {

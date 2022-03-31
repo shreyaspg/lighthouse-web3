@@ -1,9 +1,9 @@
+use crate::{Config, Context};
 use beacon_chain::{
     test_utils::{BeaconChainHarness, EphemeralHarnessType},
     BeaconChain, BeaconChainTypes,
 };
 use eth2::{BeaconNodeHttpClient, Timeouts};
-use http_api::{Config, Context};
 use lighthouse_network::{
     discv5::enr::{CombinedKey, EnrBuilder},
     libp2p::{core::connection::ConnectionId, swarm::NetworkBehaviour},
@@ -135,7 +135,7 @@ pub async fn create_api_server_on_port<T: BeaconChainTypes>(
 
     let eth1_service = eth1::Service::new(eth1::Config::default(), log.clone(), chain.spec.clone());
 
-    let context = Arc::new(Context {
+    let ctx = Arc::new(Context {
         config: Config {
             enabled: true,
             listen_addr: IpAddr::V4(Ipv4Addr::new(127, 0, 0, 1)),
@@ -151,13 +151,13 @@ pub async fn create_api_server_on_port<T: BeaconChainTypes>(
         eth1_service: Some(eth1_service),
         log,
     });
-    let ctx = context.clone();
+
     let (shutdown_tx, shutdown_rx) = oneshot::channel();
     let server_shutdown = async {
         // It's not really interesting why this triggered, just that it happened.
         let _ = shutdown_rx.await;
     };
-    let (listening_socket, server) = http_api::serve(ctx, server_shutdown).unwrap();
+    let (listening_socket, server) = crate::serve(ctx, server_shutdown).unwrap();
 
     ApiServer {
         server,

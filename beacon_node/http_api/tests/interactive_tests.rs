@@ -1,7 +1,7 @@
 //! Generic tests that make use of the (newer) `InteractiveApiTester`
-use crate::common::*;
 use beacon_chain::test_utils::{AttestationStrategy, BlockStrategy};
 use eth2::types::DepositContractData;
+use http_api::test_utils::InteractiveTester;
 use tree_hash::TreeHash;
 use types::{EthSpec, FullPayload, MainnetEthSpec, Slot};
 

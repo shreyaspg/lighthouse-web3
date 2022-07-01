@@ -8,6 +8,7 @@ mod eth1_genesis;
 mod generate_bootnode_enr;
 mod indexed_attestations;
 mod insecure_validators;
+mod insecure_web3signer_validators;
 mod interop_genesis;
 mod new_testnet;
 mod parse_ssz;
@@ -606,6 +607,66 @@ fn main() {
                 )
         )
         .subcommand(
+            SubCommand::with_name("insecure-web3signer-validators")
+                .about("Produces validator directories with INSECURE, deterministic keypairs.")
+                .arg(
+                    Arg::with_name("count")
+                        .long("count")
+                        .value_name("COUNT")
+                        .takes_value(true)
+                        .help("Produces validators in the range of 0..count."),
+                )
+                .arg(
+                    Arg::with_name("base-dir")
+                        .long("base-dir")
+                        .value_name("BASE_DIR")
+                        .takes_value(true)
+                        .help("The base directory where validator_definitions.json is stored."),
+                )
+                .arg(
+                    Arg::with_name("web3signer-dir")
+                        .long("web3signer-dir")
+                        .value_name("WEB3SIGNER_DIR")
+                        .takes_value(true)
+                        .help("The directory to store the keys and passwords for the web3signer to use."),
+                )
+                .arg(
+                    Arg::with_name("node-count")
+                        .long("node-count")
+                        .value_name("NODE_COUNT")
+                        .takes_value(true)
+                        .help("The number of nodes to divide the validator keys to"),
+                )
+                .arg(
+                    Arg::with_name("web3signer-url")
+                        .long("web3signer-url")
+                        .value_name("URL")
+                        .takes_value(true)
+                        .help("The url of the web3signer"),
+                )
+                .arg(
+                    Arg::with_name("root-certificate-path")
+                        .long("root-certificate-path")
+                        .value_name("ROOT_CERT")
+                        .takes_value(true)
+                        .help("Path to the root certificate thing"),
+                )
+                .arg(
+                    Arg::with_name("client-identity-path")
+                        .long("client-identity-path")
+                        .value_name("CLIENT_IDENTITY")
+                        .takes_value(true)
+                        .help("Path of the client identity thing"),
+                )
+                .arg(
+                    Arg::with_name("client-identity-password")
+                        .long("client-identity-password")
+                        .value_name("PASSWORD")
+                        .takes_value(true)
+                        .help("Password of the client identity thing"),
+                )
+        )
+        .subcommand(
             SubCommand::with_name("indexed-attestations")
                 .about("Convert attestations to indexed form, using the committees from a state.")
                 .arg(
@@ -706,6 +767,14 @@ fn run<T: EthSpec>(
             .map_err(|e| format!("Failed to run generate-bootnode-enr command: {}", e)),
         ("insecure-validators", Some(matches)) => insecure_validators::run(matches)
             .map_err(|e| format!("Failed to run insecure-validators command: {}", e)),
+        ("insecure-web3signer-validators", Some(matches)) => {
+            insecure_web3signer_validators::run(matches).map_err(|e| {
+                format!(
+                    "Failed to run insecure-web3signer_validators command: {}",
+                    e
+                )
+            })
+        }
         ("indexed-attestations", Some(matches)) => indexed_attestations::run::<T>(matches)
             .map_err(|e| format!("Failed to run indexed-attestations command: {}", e)),
         (other, _) => Err(format!("Unknown subcommand {}. See --help.", other)),

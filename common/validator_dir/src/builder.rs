@@ -7,7 +7,7 @@ use rand::{distributions::Alphanumeric, Rng};
 use std::fs::{create_dir_all, File};
 use std::io::{self, Write};
 use std::path::{Path, PathBuf};
-use types::{ChainSpec, DepositData, Hash256, Keypair, Signature};
+use types::{ChainSpec, DepositData, Hash256, Keypair, PublicKey, Signature};
 
 /// The `Alphanumeric` crate only generates a-z, A-Z, 0-9, therefore it has a range of 62
 /// characters.
@@ -137,6 +137,15 @@ impl<'a> Builder<'a> {
     /// Return the path to the validator dir to be built, i.e. `base_dir/pubkey`.
     pub fn get_dir_path(base_validators_dir: &Path, voting_keystore: &Keystore) -> PathBuf {
         base_validators_dir.join(format!("0x{}", voting_keystore.pubkey()))
+    }
+
+    ///
+    pub fn get_public_key(&self) -> Option<PublicKey> {
+        if let Some(keystore) = &self.voting_keystore {
+            keystore.0.public_key()
+        } else {
+            None
+        }
     }
 
     /// Consumes `self`, returning a `ValidatorDir` if no error is encountered.

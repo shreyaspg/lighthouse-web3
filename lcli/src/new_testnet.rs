@@ -104,6 +104,7 @@ pub fn run<T: EthSpec>(testnet_dir_path: PathBuf, matches: &ArgMatches) -> Resul
         let validator_count = parse_required(matches, "validator-count")?;
 
         let keypairs = generate_deterministic_keypairs(validator_count);
+        println!("shrys {:?}", keypairs);
 
         let genesis_state = interop_genesis_state::<T>(
             &keypairs,

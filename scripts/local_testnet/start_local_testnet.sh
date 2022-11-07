@@ -29,11 +29,14 @@ while getopts "v:d:h" flag; do
   esac
 done
 
+validators=$(( $VALIDATOR_COUNT / $BN_COUNT ))
 if (( $VC_COUNT > $BN_COUNT )); then
     echo "Error $VC_COUNT is too large, must be <= BN_COUNT=$BN_COUNT"
     exit
 fi
 
+echo "Starting $BN_COUNT beacon nodes, $VC_COUNT validator clients with each vc having $validators validators."
+exit
 # Init some constants
 PID_FILE=$TESTNET_DIR/PIDS.pid
 LOG_DIR=$TESTNET_DIR

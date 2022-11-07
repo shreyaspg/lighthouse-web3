@@ -29,6 +29,8 @@ while getopts "v:d:h" flag; do
   esac
 done
 
+
+
 if (( $VC_COUNT > $BN_COUNT )); then
     echo "Error $VC_COUNT is too large, must be <= BN_COUNT=$BN_COUNT"
     exit
@@ -98,13 +100,12 @@ sleeping 10
 
 # Setup data
 echo "executing: ./setup.sh >> $LOG_DIR/setup.log"
-./setup.sh >> $LOG_DIR/setup.log 2>&1
-
+result=$(./setup.sh | grep key-id | cut -d ' ' -f 2)
+key_id=$result
 # Start the web3signer
 # Delay to download and decompress the binary
-execute_command_add_PID web3signer.log ./web3signer.sh
+execute_command_add_PID web3signer.log ./web3signer.sh $key_id
 sleeping 25
-
 # Delay to let boot_enr.yaml to be created
 execute_command_add_PID bootnode.log ./bootnode.sh
 sleeping 1

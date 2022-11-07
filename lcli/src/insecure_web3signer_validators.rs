@@ -6,6 +6,7 @@ use std::fs;
 use std::path::PathBuf;
 use validator_dir::Builder as ValidatorBuilder;
 
+
 /// Generates validator directories with INSECURE, deterministic keypairs given the range
 /// of indices, validator and secret directories.
 pub fn generate_validator_dirs(

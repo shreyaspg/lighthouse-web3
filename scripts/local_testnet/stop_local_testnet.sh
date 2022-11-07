@@ -2,6 +2,7 @@
 # Stop all processes that were started with start_local_testnet.sh
 
 set -Eeuo pipefail
+set -x
 
 source ./vars.env
 

@@ -38,6 +38,8 @@ lcli \
 	--seconds-per-eth1-block $SECONDS_PER_ETH1_BLOCK \
 	--force
 
+	
+
 echo Specification generated at $TESTNET_DIR.
 echo "Generating $VALIDATOR_COUNT validators concurrently... (this may take a while)"
 

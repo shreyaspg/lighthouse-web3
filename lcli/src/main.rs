@@ -11,6 +11,7 @@ mod insecure_validators;
 mod insecure_web3signer_validators;
 mod interop_genesis;
 mod new_testnet;
+mod put_keystore;
 mod parse_ssz;
 mod replace_state_pubkeys;
 mod skip_slots;
@@ -607,6 +608,24 @@ fn main() {
                 )
         )
         .subcommand(
+            SubCommand::with_name("dsm-import")
+                .about("imports bls keys stored in BLS Keystores to Fortanix DSM")
+                .arg(
+                    Arg::with_name("keystore_path")
+                    .long("ks-path")
+                    .value_name("KS_PATH")
+                    .takes_value(true)
+                    .help("Gets keystore at given path"),
+                )
+                .arg(
+                    Arg::with_name("ks_password_path")
+                    .long("ks-pass")
+                    .value_name("KS_PASSWORD")
+                    .takes_value(true)
+                    .help("Gets keystore password"),
+                )
+            )
+        .subcommand(
             SubCommand::with_name("insecure-web3signer-validators")
                 .about("Produces validator directories with INSECURE, deterministic keypairs.")
                 .arg(
@@ -761,6 +780,8 @@ fn run<T: EthSpec>(
         }
         ("new-testnet", Some(matches)) => new_testnet::run::<T>(testnet_dir, matches)
             .map_err(|e| format!("Failed to run new_testnet command: {}", e)),
+        ("dsm-import", Some(matches)) => put_keystore::run(matches)
+                .map_err(|e| format!("Failed to run put_keystore command: {}", e)),
         ("check-deposit-data", Some(matches)) => check_deposit_data::run::<T>(matches)
             .map_err(|e| format!("Failed to run check-deposit-data command: {}", e)),
         ("generate-bootnode-enr", Some(matches)) => generate_bootnode_enr::run::<T>(matches)

@@ -10,7 +10,6 @@
 #
 
 set -o nounset -o errexit -o pipefail
-
 source ./vars.env
 
 lcli \
@@ -38,6 +37,7 @@ lcli \
 	--seconds-per-eth1-block $SECONDS_PER_ETH1_BLOCK \
 	--force
 
+
 echo Specification generated at $TESTNET_DIR.
 echo "Generating $VALIDATOR_COUNT validators concurrently... (this may take a while)"
 
@@ -52,9 +52,15 @@ lcli \
   --client-identity-password $CLIENT_IDENTITY_PASSWORD \
   --web3signer-url $WEB3SIGNER_URL
 
+lcli \
+   dsm-import \
+   --ks-path $WEB3SIGNER_DIR/keys/*.json \
+   --ks-pass $WEB3SIGNER_DIR/secrets/*.txt
+   
+echo "Importing Key inside DSM"
+
 echo Validators generated with keystore passwords at $DATADIR.
 echo "Building genesis state... (this might take a while)"
-
 lcli \
 	interop-genesis \
 	--spec $SPEC_PRESET \

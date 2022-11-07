@@ -3,26 +3,27 @@
 #
 # Starts a web3signer.
 #
+
+
+set -x
 set -Eeuo pipefail
 
 source ./vars.env
 
-mkdir temp && cd temp
-eval VERSION=$(curl -X GET "https://api.github.com/repos/ConsenSys/web3signer/releases/latest" | jq ".tag_name") &&
-wget -c "https://artifacts.consensys.net/public/web3signer/raw/names/web3signer.zip/versions/$VERSION/web3signer-$VERSION.zip" -O web3signer.zip &&
-unzip web3signer.zip && mv web3signer-* web3signer &&
-mv web3signer/ $WEB3SIGNER_DIR/web3signer &&
-cd .. &&
-rm -r temp &&
+mkdir -p $WEB3SIGNER_DIR/web3signer/bin/
+cp -r /home/ccm-user/web3signer/build/distributions/web3signer-develop/* $WEB3SIGNER_DIR/web3signer/
 
 exec $WEB3SIGNER_DIR/web3signer/bin/web3signer \
+	--tls-allow-any-client=true \
+	--tls-keystore-file=../../testing/web3signer_tests/tls/web3signer/key.p12 \
+	--tls-keystore-password-file=../../testing/web3signer_tests/tls/web3signer/password.txt \
+--logging=all \
 --http-listen-port=9099 \
---tls-known-clients-file=../../testing/web3signer_tests/tls/web3signer/known_clients.txt \
---tls-keystore-file=../../testing/web3signer_tests/tls/web3signer/key.p12 \
---tls-keystore-password-file=../../testing/web3signer_tests/tls/web3signer/password.txt \
 eth2 \
---network=mainnet \
+--fortanix-dsm-enabled=true \
+--server="https://apps.sdkms.fortanix.com" \
+--api-key="OTA5NzMxZjAtYzliNy00NTg5LWI0MTEtYjhiZjlhZjExNmQ2OmN0NEM0bVExQjFTZUlfYlcyNVk4X3FnaURnd0JMN2lVUkROOFowUGVzX1BQN3BFSVVjX1lKZ3RJTGMwcWZtdUxLNTFSdlVMVUNKeGhCR1ZSdjN4ek13" \
+--secret-name=$1 \
 --slashing-protection-enabled=false \
---keystores-path=$WEB3SIGNER_DIR/keys/ \
---keystores-passwords-path=$WEB3SIGNER_DIR/secrets/
+--network=mainnet
 

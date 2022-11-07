@@ -37,3 +37,8 @@ web3 = { version = "0.18.0", default-features = false, features = ["http-tls", "
 eth1_test_rig = { path = "../testing/eth1_test_rig" }
 sensitive_url = { path = "../common/sensitive_url" }
 eth2 = { path = "../common/eth2" }
+eth2_keystore = { path = "../crypto/eth2_keystore" }
+hex = "0.4.3"
+sdkms = { version = "0.5.0" }
+rand = "0.8.5"
+base64 = "0.13.0"

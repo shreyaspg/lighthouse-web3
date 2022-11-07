@@ -210,7 +210,7 @@ checksum = "baf13118df3e3dce4b5ac930641343b91b656e4e72c8f8325838b01a4b1c9d45"
 dependencies = [
  "http",
  "log",
- "url",
+ "url 2.2.2",
 ]
 
 [[package]]
@@ -1669,7 +1669,7 @@ dependencies = [
  "sha2 0.9.9",
  "tempfile",
  "unicode-normalization",
- "uuid",
+ "uuid 0.8.2",
  "zeroize",
 ]
 
@@ -1746,7 +1746,7 @@ dependencies = [
  "serde_repr",
  "tempfile",
  "tiny-bip39",
- "uuid",
+ "uuid 0.8.2",
 ]
 
 [[package]]
@@ -2072,7 +2072,7 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "5fc25a87fa4fd2094bffb06925852034d90a17f0d1e05197d4956d3555752191"
 dependencies = [
  "matches",
- "percent-encoding",
+ "percent-encoding 2.1.0",
 ]
 
 [[package]]
@@ -2640,6 +2640,17 @@ checksum = "b9e0384b61958566e926dc50660321d12159025e767c18e043daf26b70104c39"
 
 [[package]]
 name = "idna"
+version = "0.1.5"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "38f09e0f0b1fb55fdee1f17470ad800da77af5186a1a76c026b679358b7e844e"
+dependencies = [
+ "matches",
+ "unicode-bidi",
+ "unicode-normalization",
+]
+
+[[package]]
+name = "idna"
 version = "0.2.3"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "418a0a6fab821475f634efe3ccc45c013f742efe03d853e8d3355d5cb850ecf8"
@@ -2689,7 +2700,7 @@ dependencies = [
  "attohttpc",
  "log",
  "rand 0.7.3",
- "url",
+ "url 2.2.2",
  "xmltree",
 ]
 
@@ -2905,6 +2916,7 @@ name = "lcli"
 version = "2.3.2-rc.0"
 dependencies = [
  "account_utils",
+ "base64",
  "bls",
  "clap",
  "clap_utils",
@@ -2914,14 +2926,18 @@ dependencies = [
  "environment",
  "eth1_test_rig",
  "eth2",
+ "eth2_keystore",
  "eth2_network_config",
  "eth2_ssz",
  "eth2_wallet",
  "genesis",
+ "hex",
  "int_to_bytes",
  "lighthouse_network",
  "lighthouse_version",
  "log",
+ "rand 0.8.5",
+ "sdkms",
  "sensitive_url",
  "serde",
  "serde_json",
@@ -3311,7 +3327,7 @@ dependencies = [
  "quicksink",
  "rw-stream-sink 0.3.0",
  "soketto",
- "url",
+ "url 2.2.2",
  "webpki-roots",
 ]
 
@@ -3743,11 +3759,11 @@ dependencies = [
  "byteorder",
  "data-encoding",
  "multihash 0.14.0",
- "percent-encoding",
+ "percent-encoding 2.1.0",
  "serde",
  "static_assertions",
  "unsigned-varint 0.7.1",
- "url",
+ "url 2.2.2",
 ]
 
 [[package]]
@@ -3761,11 +3777,11 @@ dependencies = [
  "byteorder",
  "data-encoding",
  "multihash 0.16.2",
- "percent-encoding",
+ "percent-encoding 2.1.0",
  "serde",
  "static_assertions",
  "unsigned-varint 0.7.1",
- "url",
+ "url 2.2.2",
 ]
 
 [[package]]
@@ -4323,6 +4339,12 @@ checksum = "e9a3b09a20e374558580a4914d3b7d89bd61b954a5a5e1dcbea98753addb1947"
 dependencies = [
  "base64",
 ]
+
+[[package]]
+name = "percent-encoding"
+version = "1.0.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "31010dd2e1ac33d5b46a5b413495239882813e0369f8ed8a5e266f173602f831"
 
 [[package]]
 name = "percent-encoding"
@@ -5043,7 +5065,7 @@ dependencies = [
  "log",
  "mime",
  "native-tls",
- "percent-encoding",
+ "percent-encoding 2.1.0",
  "pin-project-lite 0.2.9",
  "serde",
  "serde_json",
@@ -5052,7 +5074,7 @@ dependencies = [
  "tokio-native-tls",
  "tokio-util 0.7.3",
  "tower-service",
- "url",
+ "url 2.2.2",
  "wasm-bindgen",
  "wasm-bindgen-futures",
  "web-sys",
@@ -5343,6 +5365,25 @@ dependencies = [
 ]
 
 [[package]]
+name = "sdkms"
+version = "0.5.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "474a033e7cb7c343a496026464a55bee3d98bc308d2f2ed53a9d8a21c68e1419"
+dependencies = [
+ "base64",
+ "bitflags",
+ "headers",
+ "log",
+ "serde",
+ "serde_json",
+ "simple-hyper-client",
+ "time 0.3.9",
+ "tokio-native-tls",
+ "url 1.7.2",
+ "uuid 1.2.1",
+]
+
+[[package]]
 name = "sec1"
 version = "0.2.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -5440,7 +5481,7 @@ name = "sensitive_url"
 version = "0.1.0"
 dependencies = [
  "serde",
- "url",
+ "url 2.2.2",
 ]
 
 [[package]]
@@ -5653,6 +5694,21 @@ checksum = "f2807892cfa58e081aa1f1111391c7a0649d4fa127a4ffbe34bcbfb35a1171a4"
 dependencies = [
  "digest 0.9.0",
  "rand_core 0.6.3",
+]
+
+[[package]]
+name = "simple-hyper-client"
+version = "0.1.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "72866cc5af2d56871b51989c326f6cf7005eef62b71eea8530b880157e8fe478"
+dependencies = [
+ "futures-executor",
+ "headers",
+ "http",
+ "hyper",
+ "tokio",
+ "tokio-native-tls",
+ "tokio-stream",
 ]
 
 [[package]]
@@ -6583,7 +6639,7 @@ dependencies = [
  "futures-channel",
  "futures-io",
  "futures-util",
- "idna",
+ "idna 0.2.3",
  "ipnet",
  "lazy_static",
  "log",
@@ -6592,7 +6648,7 @@ dependencies = [
  "thiserror",
  "tinyvec",
  "tokio",
- "url",
+ "url 2.2.2",
 ]
 
 [[package]]
@@ -6636,7 +6692,7 @@ dependencies = [
  "rand 0.8.5",
  "sha-1 0.9.8",
  "thiserror",
- "url",
+ "url 2.2.2",
  "utf-8",
 ]
 
@@ -6817,14 +6873,25 @@ version = "0.1.0"
 
 [[package]]
 name = "url"
+version = "1.7.2"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "dd4e7c0d531266369519a4aa4f399d748bd37043b00bde1e4ff1f60a120b355a"
+dependencies = [
+ "idna 0.1.5",
+ "matches",
+ "percent-encoding 1.0.1",
+]
+
+[[package]]
+name = "url"
 version = "2.2.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "a507c383b2d33b5fc35d1861e77e6b383d158b2da5e14fe51b83dfedf6fd578c"
 dependencies = [
  "form_urlencoded",
- "idna",
+ "idna 0.2.3",
  "matches",
- "percent-encoding",
+ "percent-encoding 2.1.0",
 ]
 
 [[package]]
@@ -6838,6 +6905,16 @@ name = "uuid"
 version = "0.8.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "bc5cf98d8186244414c848017f0e2676b3fcb46807f6668a97dfe67359a3c4b7"
+dependencies = [
+ "getrandom 0.2.7",
+ "serde",
+]
+
+[[package]]
+name = "uuid"
+version = "1.2.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "feb41e78f93363bb2df8b0e86a2ca30eed7806ea16ea0c790d757cf93f79be83"
 dependencies = [
  "getrandom 0.2.7",
  "serde",
@@ -6890,7 +6967,7 @@ dependencies = [
  "tokio",
  "tree_hash",
  "types",
- "url",
+ "url 2.2.2",
  "validator_dir",
  "warp",
  "warp_utils",
@@ -6979,7 +7056,7 @@ dependencies = [
  "mime",
  "mime_guess",
  "multipart",
- "percent-encoding",
+ "percent-encoding 2.1.0",
  "pin-project 1.0.10",
  "scoped-tls",
  "serde",
@@ -7161,7 +7238,7 @@ dependencies = [
  "futures-timer",
  "headers",
  "hex",
- "idna",
+ "idna 0.2.3",
  "jsonrpc-core",
  "log",
  "once_cell",
@@ -7176,7 +7253,7 @@ dependencies = [
  "tiny-keccak",
  "tokio",
  "tokio-util 0.6.10",
- "url",
+ "url 2.2.2",
  "web3-async-native-tls",
 ]
 
@@ -7189,7 +7266,7 @@ dependencies = [
  "native-tls",
  "thiserror",
  "tokio",
- "url",
+ "url 2.2.2",
 ]
 
 [[package]]
@@ -7212,7 +7289,7 @@ dependencies = [
  "tempfile",
  "tokio",
  "types",
- "url",
+ "url 2.2.2",
  "validator_client",
  "zip",
 ]
